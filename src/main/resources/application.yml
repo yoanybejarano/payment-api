@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: payment-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/payment-db
+    username: root
+    password: Orwell1984*
+server:
+  port: 8090
+  servlet:
+    context-path: /api/v1
