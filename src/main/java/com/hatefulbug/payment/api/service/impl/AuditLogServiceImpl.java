@@ -5,14 +5,12 @@ import com.hatefulbug.payment.api.model.User;
 import com.hatefulbug.payment.api.repository.AuditLogRepository;
 import com.hatefulbug.payment.api.repository.UserRepository;
 import com.hatefulbug.payment.api.request.PartialAuditLog;
+import com.hatefulbug.payment.api.request.RangeDateRequest;
 import com.hatefulbug.payment.api.service.AuditLogService;
-import com.hatefulbug.payment.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,8 +33,8 @@ public class AuditLogServiceImpl implements AuditLogService {
     }
 
     @Override
-    public List<AuditLog> getLogsByDateRange(Date from, Date to) {
-        return logRepository.findAllByTimestampBetween(from.toInstant(), to.toInstant());
+    public List<AuditLog> getLogsByDateRange(RangeDateRequest rangeDate) {
+        return logRepository.findAllByTimestampBetween(rangeDate.getStartDate().toInstant(), rangeDate.getEndDate().toInstant());
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.hatefulbug.payment.api.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -15,13 +13,14 @@ import java.time.Instant;
 @Table(name = "audit_logs")
 public class AuditLog {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LogID", nullable = false)
     private Integer id;
 
     @Column(name = "Action", nullable = false, length = 100)
     private String action;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
@@ -29,7 +28,7 @@ public class AuditLog {
     @Column(name = "Details")
     private String details;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "Timestamp")
     private Instant timestamp;
 

@@ -3,6 +3,7 @@ package com.hatefulbug.payment.api.controller;
 import com.hatefulbug.payment.api.model.Payment;
 import com.hatefulbug.payment.api.reponse.ApiResponse;
 import com.hatefulbug.payment.api.request.PartialPayment;
+import com.hatefulbug.payment.api.request.RangeDateRequest;
 import com.hatefulbug.payment.api.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,9 @@ public class PaymentController {
         return new ResponseEntity<>(new ApiResponse(payments, "Payments successfully obtained"), HttpStatus.OK);
     }
 
-    @GetMapping("/from/{from}/to/{to}")
-    public ResponseEntity<ApiResponse> getPaymentsByDates(@PathVariable Date from, @PathVariable Date to) {
-        List<Payment> payments = paymentService.getPaymentsByDates(from, to);
+    @GetMapping("/byRangeDate")
+    public ResponseEntity<ApiResponse> getPaymentsByDates(@RequestBody RangeDateRequest rangeDate) {
+        List<Payment> payments = paymentService.getPaymentsByDates(rangeDate);
         return new ResponseEntity<>(new ApiResponse(payments, "Payments successfully obtained"), HttpStatus.OK);
     }
 

@@ -8,6 +8,7 @@ import com.hatefulbug.payment.api.model.User;
 import com.hatefulbug.payment.api.repository.PaymentRepository;
 import com.hatefulbug.payment.api.request.PartialAuditLog;
 import com.hatefulbug.payment.api.request.PartialPayment;
+import com.hatefulbug.payment.api.request.RangeDateRequest;
 import com.hatefulbug.payment.api.service.AuditLogService;
 import com.hatefulbug.payment.api.service.PaymentMethodService;
 import com.hatefulbug.payment.api.service.PaymentService;
@@ -44,7 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
                 payment.setAmount(partialPayment.getAmount());
                 payment.setCurrency(CurrencyType.valueOf(partialPayment.getCurrency()));
                 payment.setPaymentMethod(paymentMethod);
-                payment.setPaymentStatus(PaymentStatus.PENDING);
+                payment.setPaymentStatus(PaymentStatus.Pending);
                 payment.setPaymentDate(Instant.now());
                 payment.setTransactionID(transactionId);
                 Payment result = paymentRepository.save(payment);
@@ -63,22 +64,26 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     @Override
     public Payment updatePaymentStatus(int id, String status) {
-        Payment payment = getPaymentById(id);
-        if (payment != null && !Objects.equals(payment.getPaymentStatus().toString(), status)) {
-            payment.setPaymentStatus(PaymentStatus.valueOf(status));
-            Payment result = paymentRepository.save(payment);
-            logService.createAuditLog(PartialAuditLog.builder()
-                    .userId(result.getUser().getId())
-                    .action("Transaction Status Updated")
-                    .details(String.format("Transaction %s created successfully.", result.getTransactionID())).build());
-            return result;
+        try {
+            Payment payment = getPaymentById(id);
+            if (payment != null && !Objects.equals(payment.getPaymentStatus().toString(), status)) {
+                payment.setPaymentStatus(PaymentStatus.valueOf(status));
+                Payment result = paymentRepository.save(payment);
+                logService.createAuditLog(PartialAuditLog.builder()
+                        .userId(result.getUser().getId())
+                        .action("Transaction Status Updated")
+                        .details(String.format("Transaction %s status updated successfully.", result.getTransactionID())).build());
+                return result;
+            }
+            return null;
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override
     public Payment getPaymentById(int paymentId) {
-        return paymentRepository.findById(paymentId).orElseThrow(() -> new RuntimeException(String.format("Payment %s created successfully.", paymentId)));
+        return paymentRepository.findById(paymentId).orElseThrow(() -> new RuntimeException(String.format("Payment with id %s not found.", paymentId)));
     }
 
     @Override
@@ -92,7 +97,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> getPaymentsByDates(Date from, Date to) {
-        return paymentRepository.findAllByPaymentDateBetween(from.toInstant(), to.toInstant());
+    public List<Payment> getPaymentsByDates(RangeDateRequest rangeDate) {
+        return paymentRepository.findAllByPaymentDateBetween(rangeDate.getStartDate().toInstant(), rangeDate.getEndDate().toInstant());
     }
 }

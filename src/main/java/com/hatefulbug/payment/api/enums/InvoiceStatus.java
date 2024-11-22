@@ -1,9 +1,9 @@
 package com.hatefulbug.payment.api.enums;
 
 public enum InvoiceStatus {
-    PAID("Paid"),
-    UNPAID("Unpaid"),
-    OVERDUE("Overdue");
+    Paid("Paid"),
+    Unpaid("Unpaid"),
+    Overdue("Overdue");
 
     private String status;
     InvoiceStatus(String status) {

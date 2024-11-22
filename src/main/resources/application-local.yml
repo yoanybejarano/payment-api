@@ -2,9 +2,9 @@ spring:
   application:
     name: payment-api
   datasource:
-    url: jdbc:mysql://mysqlApp:3306/payment-db
-    username: orwell
-    password: orwell1984
+    url: jdbc:mysql://localhost:3306/payment-db
+    username: root
+    password: Orwell1984*
   jpa:
     properties:
       hibernate:

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -15,10 +17,11 @@ import java.time.Instant;
 @Table(name = "refunds")
 public class Refund {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RefundID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "PaymentID", nullable = false)
     private Payment payment;
 
@@ -29,7 +32,6 @@ public class Refund {
     @Column(name = "RefundReason")
     private String refundReason;
 
-    @ColumnDefault("'Initiated'")
     @Enumerated(EnumType.STRING)
     @Column(name = "RefundStatus")
     private RefundStatus refundStatus;
@@ -38,11 +40,11 @@ public class Refund {
     @Column(name = "RefundDate")
     private Instant refundDate;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @UpdateTimestamp
     @Column(name = "UpdatedAt")
     private Instant updatedAt;
 

@@ -7,6 +7,7 @@ import com.hatefulbug.payment.api.repository.InvoiceRepository;
 import com.hatefulbug.payment.api.request.PartialAuditLog;
 import com.hatefulbug.payment.api.request.PartialInvoice;
 import com.hatefulbug.payment.api.request.PartialInvoiceUpdate;
+import com.hatefulbug.payment.api.request.RangeDateRequest;
 import com.hatefulbug.payment.api.service.AuditLogService;
 import com.hatefulbug.payment.api.service.InvoiceService;
 import com.hatefulbug.payment.api.service.UserService;
@@ -43,8 +44,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<Invoice> getInvoicesByDates(Date from, Date to) {
-        return invoiceRepository.findAllByInvoiceDateBetween(from.toInstant(), to.toInstant());
+    public List<Invoice> getInvoicesByDates(RangeDateRequest rangeDate) {
+        return invoiceRepository.findAllByInvoiceDateBetween(rangeDate.getStartDate().toInstant(), rangeDate.getEndDate().toInstant());
     }
 
     @Transactional
@@ -58,7 +59,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoice.setTotalAmount(partialInvoice.getTotalAmount());
                 invoice.setInvoiceDate(Instant.now());
                 invoice.setDueDate(partialInvoice.getDueDate().toInstant());
-                invoice.setInvoiceStatus(InvoiceStatus.UNPAID);
+                invoice.setInvoiceStatus(InvoiceStatus.Unpaid);
                 Invoice result = invoiceRepository.save(invoice);
                 logService.createAuditLog(PartialAuditLog.builder()
                         .userId(partialInvoice.getUserId())

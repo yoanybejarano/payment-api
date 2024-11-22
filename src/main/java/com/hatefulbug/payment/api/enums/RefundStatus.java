@@ -1,8 +1,8 @@
 package com.hatefulbug.payment.api.enums;
 
 public enum RefundStatus {
-    INITIATED("Initiated"),
-    PROCESSED("Processed");
+    Initiated("Initiated"),
+    Processed("Processed");
 
     private String status;
     RefundStatus(String status) {

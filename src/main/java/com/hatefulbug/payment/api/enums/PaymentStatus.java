@@ -1,12 +1,17 @@
 package com.hatefulbug.payment.api.enums;
 
 public enum PaymentStatus {
-    PENDING("Pending"),
-    COMPLETED("Completed"),
-    FAILED("Failed");
+    Pending("Pending"),
+    Completed("Completed"),
+    Failed("Failed");
 
-    private String status;
+    private String status = "";
     PaymentStatus(String value) {
         this.status = value;
+    }
+
+    @Override
+    public String toString() {
+        return status;
     }
 }

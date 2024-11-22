@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -16,10 +19,11 @@ import java.time.Instant;
 @Table(name = "payments")
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PaymentID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
@@ -30,7 +34,7 @@ public class Payment {
     @Column(name = "Currency", nullable = false, length = 10)
     private CurrencyType currency;
 
-    @ColumnDefault("'Pending'")
+    //@ColumnDefault("'Pending'")
     @Enumerated(EnumType.STRING)
     @Column(name = "PaymentStatus")
     private PaymentStatus paymentStatus;
@@ -39,18 +43,18 @@ public class Payment {
     @Column(name = "PaymentDate")
     private Instant paymentDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "PaymentMethodID", nullable = false)
     private PaymentMethod paymentMethod;
 
     @Column(name = "TransactionID", nullable = false, length = 100)
     private String transactionID;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @UpdateTimestamp
     @Column(name = "UpdatedAt")
     private Instant updatedAt;
 

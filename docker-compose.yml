@@ -1,0 +1,37 @@
+services:
+  mysqlapp:
+    image: mysql
+    container_name: mysqlApp
+    restart: always
+    volumes:
+      - ./src/main/resources/scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql # Mount SQL initialization scripts
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: payment-db
+      MYSQL_USER: orwell
+      MYSQL_PASSWORD: orwell1984
+
+    ports:
+      - "3307:3306"
+    networks:
+      - spring_mysql
+
+  spring-boot-app:
+    container_name: springbootapp
+    build: .
+    restart: no
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mysqlapp
+    environment:
+      MYSQL_HOST: mysqlapp
+      MYSQL_USER: orwell
+      MYSQL_PASSWORD: orwell1984
+      MYSQL_PORT: 3306
+    networks:
+      - spring_mysql
+networks:
+  spring_mysql:
+    driver: bridge

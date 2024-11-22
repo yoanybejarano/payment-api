@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,11 +16,13 @@ import java.time.Instant;
 @Entity
 @Table(name = "invoices")
 public class Invoice {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "InvoiceID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
@@ -32,16 +36,15 @@ public class Invoice {
     @Column(name = "DueDate", nullable = false)
     private Instant dueDate;
 
-    @ColumnDefault("'Unpaid'")
     @Enumerated(EnumType.STRING)
     @Column(name = "InvoiceStatus")
     private InvoiceStatus invoiceStatus;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @UpdateTimestamp
     @Column(name = "UpdatedAt")
     private Instant updatedAt;
 

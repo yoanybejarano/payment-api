@@ -1,6 +1,5 @@
 package com.hatefulbug.payment.api.request;
 
-import com.hatefulbug.payment.api.enums.CurrencyType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -4,6 +4,7 @@ import com.hatefulbug.payment.api.model.Invoice;
 import com.hatefulbug.payment.api.reponse.ApiResponse;
 import com.hatefulbug.payment.api.request.PartialInvoice;
 import com.hatefulbug.payment.api.request.PartialInvoiceUpdate;
+import com.hatefulbug.payment.api.request.RangeDateRequest;
 import com.hatefulbug.payment.api.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,9 @@ public class InvoiceController {
         return new ResponseEntity<>(new ApiResponse(invoices, "Invoices successfully obtained"), HttpStatus.OK);
     }
 
-    @GetMapping("/from/{from}/to/{to}")
-    public ResponseEntity<ApiResponse> getInvoicesByDates(@PathVariable Date from, @PathVariable Date to) {
-        List<Invoice> invoices = invoiceService.getInvoicesByDates(from, to) ;
+    @GetMapping("/byRangeDate")
+    public ResponseEntity<ApiResponse> getInvoicesByDates(@RequestBody RangeDateRequest rangeDate) {
+        List<Invoice> invoices = invoiceService.getInvoicesByDates(rangeDate) ;
         return new ResponseEntity<>(new ApiResponse(invoices, "Invoices successfully obtained"), HttpStatus.OK);
     }
 

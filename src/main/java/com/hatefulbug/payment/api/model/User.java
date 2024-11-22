@@ -1,9 +1,11 @@
 package com.hatefulbug.payment.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UserID", nullable = false)
     private Integer id;
 
@@ -29,17 +32,19 @@ public class User {
     @Column(name = "PhoneNumber", length = 20)
     private String phoneNumber;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @CreationTimestamp
     @Column(name = "CreatedAt")
     private Instant createdAt;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @UpdateTimestamp
     @Column(name = "UpdatedAt")
     private Instant updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     private List<Payment> payments;
 
+    @JsonIgnore
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     private List<AuditLog> auditLogs;
 
